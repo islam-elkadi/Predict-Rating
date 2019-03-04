@@ -1,18 +1,7 @@
 from os import system
-
-from utilities import Utils
+from utilities import make_dir
 
 class Classify():
-
-    def __init__(self):
-        """
-            Initalizes Classify class with utilities
-            Paras:
-                None
-            Returns:
-                None
-        """
-        self.utls = Utils()
 
     def setParameters(self, **kwargs):
 
@@ -142,11 +131,12 @@ class Classify():
             Returns:
                 None
         """
-        self.utls.make_dir("./fastTextModels")
+        make_dir("./fastTextModels")
         name = kwargs["name"]
         parameters = self.setParameters(**kwargs)
         system("./fastText/fasttext supervised -input ./Dataset/training_processed/training_balanced_{}.txt -output ./fastTextModels/model_{} -label __label__ {}".format(name, name, parameters))
-       
+
+
 if __name__ == "__main__":
     kwargs = {
             "name": "BookReviews",

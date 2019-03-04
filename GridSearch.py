@@ -1,55 +1,44 @@
 import json
 import spacy
 
-from utilities import makedir
 from itertools import product
 from collections import defaultdict
+from utilities import make_dir, save_data
 
-from Synonyms import Synonyms
-from train_nns import WordRepresentation
+from TestClassifier import Test
+from TrainClassifier import Classify
 
-class GridSearch(WordRepresentation):
+class GridSearch(Test, Classify):
 
     def __init__(self):
         super().__init__()
 
-    def grid_search(self, kwargs, categories):
-        evaluations = defaultdict(list)
+    def grid_search(self, kwargs):
+        make_dir("evaluations")
         bucket = [2e6, 6e6, 10e6]
         lr = [10e-2, 10e-3, 10e-4]
         dim = [200, 300]
         epoch = [10, 17, 25]
-        loss = ["ns", "hs"]
+        loss = ["ns", "softmax"]
         args = product(bucket, lr, dim, epoch, loss)
-
+        
         for i, combinations in enumerate(args):
-            temp_evaluations = defaultdict(list)
-            makedir("evaluations")
-            kwargs["model"] = "cbow"
-            kwargs["name"] = "{}_{}_{}".format("BookReviews", kwargs["model"], i)
+            kwargs["name"] = "{}_{}_{}".format("AmazonInstantVideo", kwargs["model"], i)
             kwargs["wordNgrams"] = 6
             kwargs["bucket"] = int(combinations[0])
             kwargs["lr"] = combinations[1]
             kwargs["dim"] = combinations[2]
             kwargs["epoch"] = combinations[3]
             kwargs["loss"] = combinations[4]
-            self.main(**kwargs)
-            model = spacy.load("../SpaCy_models/{}".format(kwargs["name"]))
-            syns = Synonyms(model).create_synonyms(categories)
-            
-            temp_evaluations["parameters"].append(combinations)
-            temp_evaluations["results"].append(syns)
+            self.main_trainClassifier(**kwargs)
+            results = "{} + \n + {}".format(kwargs["name"], self.TestClassifier(kwargs["name"]))            
+            save_data(directory = "evaluations", name = "results.txt", docs = results, mode = "a")
 
-            evaluations[i].append(temp_evaluations)
-
-        with open("evaluations/grid_search.json", mode = "w") as doc:
-            json.dump(evaluations, doc, indent = 4, ensure_ascii = True)
 
 if __name__ == "__main__":
 
     kwargs = {
         "name":None,
-        "model":None,
         "verbose":None,
         "minCount":None ,
         "minCountLabel":None,
@@ -75,7 +64,5 @@ if __name__ == "__main__":
         "dsub":None,
     }
 
-    categories = ["theme", "plot", "character", "style", "dialogue"]
-
     gridsearch = GridSearch()
-    gridsearch.grid_search(kwargs, categories)
+    gridsearch.grid_search(kwargs)

@@ -1,24 +1,14 @@
 import re
 import pandas as pd
 
+from os.path import join
 from os import remove, system
-from subprocess import Popen, PIPE
 
-from utilities import Utils
+from utilities import remove_columns, clean_text, save_data, make_dir, shell2var
 
 class Test():
 
-    def __init__(self):
-        """
-            Initalizes Test class with utilities
-            Paras:
-                None
-            Returns:
-                None
-        """
-        self.utls = Utils()
-
-    def TestClassifier(self):
+    def TestClassifier(self, name):
         """
             Constructs dataframe with test resutls
 
@@ -28,19 +18,22 @@ class Test():
                 None
         """
 
-        df = self.utls.pd_csv("./Dataset/testing/train.csv")
-        # df = df.loc[df["categoryName"] == "CDVinyl"]
-        df = self.utls.remove_columns(df, ["summary", "reviewText", "overall"])
+        if make_dir("./Dataset/testing/train.csv"):
 
-        for _, temp in df.iterrows():
-            data = temp.summary + ". " + temp.reviewText
-            data = self.utls.clean_text(data)
-            data = temp.overall + " " + data + "\n"
-            self.utls.save_data("./", "test_cdvyinyl.txt", data, mode = "a")
-        
-        system("./fastText/fasttext test ./fastTextModels/model_cdvinyl_4.bin test_cdvyinyl.txt")
-        remove("test_cdvyinyl.txt")    
+            df = pd.read_csv("./Dataset/testing/train.csv")
+            df = df.loc[df["categoryName"] == name]
+            df = remove_columns(df, ["summary", "reviewText", "overall"])
+
+            for _, temp in df.iterrows():
+                data = temp.summary + ". " + temp.reviewText
+                data = clean_text(data)
+                data = temp.overall + " " + data + "\n"
+                save_data("./Dataset/test_set_processed", "test_{}.txt".format(name), data, mode = "a")
+        test_directory = join("./Dataset/test_set_processed", "test_{}.txt".format(name))
+        test_cmd = "./fastText/fasttext test ./fastTextModels/{}.bin {}".format(name, test_directory)
+        return shell2var(test_cmd)
 
 if __name__ == "__main__":
+    name = "AmazonInstantVideo"
     classify = Test()
-    classify.TestClassifier()
+    classify.TestClassifier(name)

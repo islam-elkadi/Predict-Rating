@@ -6,6 +6,7 @@ from itertools import product
 from collections import Counter
 from os import listdir, makedirs
 from os.path import exists, join
+from subprocess import run, PIPE
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 
@@ -55,7 +56,6 @@ def filterReview(df, name, value):
             df: data frame
     """
     return df.loc[df[name] == value]
-
 
 #################
 ##  Load/Save  ##
@@ -107,6 +107,10 @@ def save_data(directory, name, docs, mode = "w"):
 
 def saveResults(df):
     df.to_csv("TrainingResults.csv", encoding = 'utf-8', index = False)
+
+def shell2var(cmd):
+    result = run(args = cmd, stderr = PIPE, universal_newlines = True, stdout = PIPE, shell = True)   
+    return result.stdout    
 
 #################
 ##  Clean text ##
