@@ -4,11 +4,10 @@ import pandas as pd
 
 from itertools import product
 from collections import Counter
-from os import listdir, makedirs
 from os.path import exists, join
 from subprocess import run, PIPE
 from nltk.corpus import stopwords
-
+from os import listdir, makedirs, system
 
 #################
 ##  Pandas DF  ##
@@ -85,7 +84,7 @@ def make_dir(directory):
             Boolean
     """
     if not exists(directory): 
-        makedirs(directory)
+        makedirs(directory, exist_ok = True)
         return True
     else:
         return False
@@ -100,7 +99,7 @@ def save_data(directory, name, docs, mode = "w"):
         Returns:
             None
     """
-    makedirs(directory)
+    make_dir(directory)
     with open(join(directory, name), mode, encoding = "utf-8") as f:
         f.write(docs)
 
@@ -233,6 +232,7 @@ def clean_text(text):
             text: cleaned text data
     """
     stops = set(stopwords.words("english"))
+    text = text.encode("ascii", errors = "ignore").decode()
     text = [remove_contractions(word.lower()) for word in text.split()]
     text = " ".join([w for w in text if not w in stops])
     return  re.sub(r"[^a-zA-Z\s+\']", "", text)  

@@ -7,7 +7,6 @@ from os.path import join
 from os import listdir, makedirs
 from utilities import merge_workbooks, loadData, filterReview, clean_text
 
-
 class DataProcessing():
 
     def balanceReviews(self, split_reviews, column_names):
@@ -35,7 +34,7 @@ class DataProcessing():
                 None
         """
         columns = ["summary", "reviewText", "overall"]
-        df = loadData("./Dataset/raw_training_set", columns)
+        df = loadData("../Dataset/raw_training_set", columns)
 
         split_reviews = [filterReview(df, "overall", i) for i in range(1,6)]
         df = self.balanceReviews(split_reviews, columns)

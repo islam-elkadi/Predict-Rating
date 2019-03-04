@@ -20,7 +20,7 @@ class DataSets(DataProcessing):
 		"""
 		super().__init__()
 
-	def createTrainingCorpus(self, df):
+	def createTrainingCorpus(self, df, name):
 		"""
 			Creates training data set with labels appended to beginging of each label
 
@@ -36,7 +36,7 @@ class DataSets(DataProcessing):
 		for rating, review in zip(ratings, reviews):
 			doc =  "__label__{}".format(rating) + " " + review.strip()
 			doc = " ".join([word for word in word_tokenize(doc) if len(word)>1])
-			save_data("./Dataset/training_processed", "training_amazon_video.txt", doc + "\n", mode = "a")
+			save_data("../Dataset/training_processed", "{}.txt".format(name), doc + "\n", mode = "a")
 
 	def createSet(self):
 		"""
@@ -47,8 +47,9 @@ class DataSets(DataProcessing):
 			Returns:
 				None
 		"""	
+		name = "CDVinyl"
 		df = self.ProcessData()
-		self.createTrainingCorpus(df)
+		self.createTrainingCorpus(df, name)
 		
 if __name__ == "__main__":
 	data = DataSets()

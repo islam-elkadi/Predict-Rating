@@ -1,7 +1,7 @@
 from os import system
 from utilities import make_dir
 
-class Classify():
+class Train():
 
     def setParameters(self, **kwargs):
 
@@ -131,14 +131,16 @@ class Classify():
             Returns:
                 None
         """
-        make_dir("./fastTextModels")
+        make_dir("../fastTextModels")
         name = kwargs["name"]
+        model = kwargs["model"]
         parameters = self.setParameters(**kwargs)
-        system("./fastText/fasttext supervised -input ./Dataset/training_processed/training_balanced_{}.txt -output ./fastTextModels/model_{} -label __label__ {}".format(name, name, parameters))
+        system("../fastText/fasttext {} -input ../Dataset/training_set_processed/training_{}.txt -output ../fastTextModels/model_{} -label __label__ {}".format(model, name, name, parameters))
 
 if __name__ == "__main__":
     kwargs = {
-            "name": "BookReviews",
+            "name": "CDVinyl",
+            "model" :"supervised",
             "verbose": None,
             "minCount": None, 
             "minCountLabel": None, 
@@ -163,5 +165,5 @@ if __name__ == "__main__":
             "qnorm": None, 
             "qout": None, 
             "dsub": None}
-    classifier = Classify()
+    classifier = Train()
     classifier.main_trainClassifier(**kwargs)
