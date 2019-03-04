@@ -11,7 +11,8 @@ class DataSets(DataProcessing):
 
 	def __init__(self):
 		"""
-			Initalizes DataSets class with utilities and preprocessing
+			Inherits preprocessing class
+			
 			Paras:
 				None
 			Returns:

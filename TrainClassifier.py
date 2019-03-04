@@ -136,7 +136,6 @@ class Classify():
         parameters = self.setParameters(**kwargs)
         system("./fastText/fasttext supervised -input ./Dataset/training_processed/training_balanced_{}.txt -output ./fastTextModels/model_{} -label __label__ {}".format(name, name, parameters))
 
-
 if __name__ == "__main__":
     kwargs = {
             "name": "BookReviews",

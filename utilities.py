@@ -8,7 +8,6 @@ from os import listdir, makedirs
 from os.path import exists, join
 from subprocess import run, PIPE
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
 
 
 #################
@@ -105,10 +104,15 @@ def save_data(directory, name, docs, mode = "w"):
     with open(join(directory, name), mode, encoding = "utf-8") as f:
         f.write(docs)
 
-def saveResults(df):
-    df.to_csv("TrainingResults.csv", encoding = 'utf-8', index = False)
-
 def shell2var(cmd):
+    """
+        Runs shell command and returns output in a varible
+
+        Paras:
+            cmd: shell command
+        Returns:
+            output of shell command
+    """
     result = run(args = cmd, stderr = PIPE, universal_newlines = True, stdout = PIPE, shell = True)   
     return result.stdout    
 
