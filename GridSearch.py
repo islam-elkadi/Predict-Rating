@@ -30,10 +30,11 @@ class GridSearch(Test, Classify):
             kwargs["dim"] = combinations[2]
             kwargs["epoch"] = combinations[3]
             kwargs["loss"] = combinations[4]
+            parameters = " ".join([kwargs["wordNgrams"], kwargs["bucket"], kwargs["lr"], kwargs["dim"], kwargs["epoch"], kwargs["loss"]])
+            
             self.main_trainClassifier(**kwargs)
-            results = "{} + \n + {}".format(kwargs["name"], self.TestClassifier(kwargs["name"]))            
+            results = "{}\n{}\n\n".format(parameters, self.TestClassifier(kwargs["name"]))            
             save_data(directory = "evaluations", name = "results.txt", docs = results, mode = "a")
-
 
 if __name__ == "__main__":
 

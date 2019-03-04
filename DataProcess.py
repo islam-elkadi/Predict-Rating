@@ -25,7 +25,7 @@ class DataProcessing():
             Returns:
                 None
         """
-        df = loadData("./Dataset/raw_training", column_names)
+        df = loadData("./Dataset/raw_training_set", column_names)
         split_reviews = [filterReview(df, "overall", i) for i in range(1,6)]
         df = self.balanceReviews(split_reviews, column_names)
         df["reviews"] = df["summary"] + " " + df["reviewText"]

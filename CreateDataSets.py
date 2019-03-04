@@ -29,8 +29,11 @@ class DataSets(DataProcessing):
 				None
 		"""
 		df = df.sample(frac = 1).reset_index(drop = True)
-		for i, doc in enumerate(df["reviews"]):
-			doc =  "__label__%i" %(df["ratings"][i]) + " " + doc.rstrip()
+		ratings = df["ratings"].tolist()
+		reviews = df["reviews"].tolist()
+
+		for rating, review in zip(ratings, reviews):
+			doc =  "__label__{}".format(rating) + " " + review.strip()
 			doc = " ".join([word for word in word_tokenize(doc) if len(word)>1])
 			save_data("./Dataset/training_processed", "training_amazon_video.txt", doc + "\n", mode = "a")
 
