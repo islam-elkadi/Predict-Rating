@@ -2,8 +2,6 @@ import re
 
 import pandas as pd
 
-from itertools import product
-from collections import Counter
 from os.path import exists, join
 from subprocess import run, PIPE
 from nltk.corpus import stopwords
