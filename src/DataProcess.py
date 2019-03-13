@@ -34,15 +34,11 @@ class DataProcessing():
         """
         columns = ["summary", "reviewText", "overall"]
         df = loadData("../Dataset/raw_training_set", columns)
-
         split_reviews = [filterReview(df, "overall", i) for i in range(1,6)]
         df = self.balanceReviews(split_reviews, columns)
         df["reviews"] = df["summary"] + " " + df["reviewText"]
-
-        reviews = df["reviews"].apply(lambda x: clean_text(x))
-        ratings = df["overall"].tolist()
-        
-        return pd.DataFrame({"reviews": reviews.tolist(), "ratings": ratings})
+        df["reviews"] = df["reviews"].apply(lambda x: clean_text(x))
+        return df[["reviews", "overall"]]
 
 if __name__ == "__main__":
     Preprocessing = DataProcessing()

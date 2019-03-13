@@ -7,9 +7,9 @@ from subprocess import run, PIPE
 from nltk.corpus import stopwords
 from os import listdir, makedirs, system
 
-#################
-##  Pandas DF  ##
-#################
+###################################################
+##                    Pandas DF                  ##
+###################################################
 
 def remove_columns(dataframe, column_names):
     """
@@ -53,9 +53,9 @@ def filterReview(df, name, value):
     """
     return df.loc[df[name] == value]
 
-#################
-##  Load/Save  ##
-#################
+###################################################
+##                   Load/Save                   ##
+###################################################
 
 def loadData(path, column_names):
     """
@@ -111,11 +111,12 @@ def shell2var(cmd):
             output of shell command
     """
     result = run(args = cmd, stderr = PIPE, universal_newlines = True, stdout = PIPE, shell = True)   
+    print(result.stdout)
     return result.stdout    
 
-#################
-##  Clean text ##
-#################
+###################################################
+##                  Clean text                   ##
+###################################################
 
 def remove_contractions(raw):
     """
