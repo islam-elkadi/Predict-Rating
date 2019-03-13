@@ -1,8 +1,8 @@
 from itertools import product
+
+from Classifier import Train, Test
 from utilities import make_dir, save_data
 
-from TestClassifier import Test
-from TrainClassifier import Train
 
 class GridSearch(Test, Train):
 

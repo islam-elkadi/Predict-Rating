@@ -64,8 +64,8 @@ class DataSets(DataProcessing):
 		"""	
 		name = "CDVinyl"
 		df = self.ProcessData()
-		self.createTrainingCorpus(df[:int(split*len(df)), :], name)
-		self.createTestingCorpus(df[int(split*len(df)):, :], name)
+		self.createTrainingCorpus(df[:int(split_ratio*len(df)), :], name)
+		self.createTestingCorpus(df[int(split_ratio*len(df)):, :], name)
 		
 if __name__ == "__main__":
 	data = DataSets()
