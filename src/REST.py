@@ -1,6 +1,5 @@
-from TestClassifier import Test
-from TrainClassifier import Train
 from GridSearch import GridSearch
+from Classifier import Train, Test
 from CreateDataSets import DataSets
 
 from flask import Flask, jsonify, request, make_response
@@ -21,8 +20,8 @@ def testApp():
 
 @app.route("/Preprocessing", methods = ["GET"])
 def Preprocessing():
-    preprocess.createSet()
-    return jsonify({"Create/Process Training Data": "Success"})
+    preprocess.createSet(split_ratio = 0.8)
+    return jsonify({"Create training & test Sets": "Success"})
 
 @app.route("/TrainFastText", methods = ["POST"])
 def TrainFastText():
@@ -53,13 +52,13 @@ def TrainFastText():
         "qnorm": request.json.get("qnorm"), 
         "qout": request.json.get("qout"), 
         "dsub": request.json.get("dsub")}
-    train.main_trainClassifier(**kwargs)
+    train.trainClassifier(**kwargs)
     return jsonify({"Create/Process Training Data": "Success"})
 
 @app.route("/Test_Classifier", methods = ["POST"])
 def Test_Classifier():
     name = request.json.get("name")
-    results = test.TestClassifier(name)
+    results = test.testClassifier(name)
     return jsonify({"Results": results})
 
 @app.route("/Grid", methods = ["POST"])

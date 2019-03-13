@@ -12,7 +12,6 @@ class GridSearch(Test, Train):
     def grid_search(self, kwargs):
 
         make_dir("../evaluations")
-
         wordNgrams = kwargs["wordNgrams"]
         bucket = kwargs["bucket"]
         lr = kwargs["lr"]
@@ -33,8 +32,8 @@ class GridSearch(Test, Train):
 
             parameters = " ".join(map(str, [kwargs["wordNgrams"], kwargs["bucket"], kwargs["lr"], kwargs["dim"], kwargs["epoch"], kwargs["loss"]]))
             
-            self.main_trainClassifier(**kwargs)
-            results = "{}\n{}\n\n".format(parameters, self.TestClassifier(kwargs["name"]))            
+            self.trainClassifier(**kwargs)
+            results = "{}\n{}\n\n".format(parameters, self.testClassifier(kwargs["name"]))            
             save_data(directory = "../evaluations", name = "results.txt", docs = results, mode = "a")
 
 if __name__ == "__main__":

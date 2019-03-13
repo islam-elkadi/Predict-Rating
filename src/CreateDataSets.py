@@ -38,7 +38,22 @@ class DataSets(DataProcessing):
 			doc = " ".join([word for word in word_tokenize(doc) if len(word)>1])
 			save_data("../Dataset/training_processed", "{}.txt".format(name), doc + "\n", mode = "a")
 
-	def createSet(self):
+	def createTestingCorpus(self, df, name):
+		"""
+			Constructs dataframe with test resutls
+
+			Paras:
+				None
+			Return:
+				None
+		"""
+
+		df["reviews"] = df["summary"] + ". " + df["reviewText"]
+		for _, temp in df.iterrows():
+			data = temp.overall + " " + temp.reviews + "\n"
+			save_data("../Dataset/test_set/", "test_{}.txt".format(name), data, mode = "a")
+
+	def createSet(self, split_ratio):
 		"""
 			Runs DataSets class and creates training set
 
@@ -49,8 +64,9 @@ class DataSets(DataProcessing):
 		"""	
 		name = "CDVinyl"
 		df = self.ProcessData()
-		self.createTrainingCorpus(df, name)
+		self.createTrainingCorpus(df[:int(split*len(df)), :], name)
+		self.createTestingCorpus(df[int(split*len(df)):, :], name)
 		
 if __name__ == "__main__":
 	data = DataSets()
-	data.createSet()
+	data.createSet(0.8)

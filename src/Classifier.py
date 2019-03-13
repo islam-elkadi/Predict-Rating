@@ -1,5 +1,6 @@
 from os import system
-from utilities import make_dir
+from os.path import join
+from utilities import make_dir, shell2var
 
 class Train():
 
@@ -123,7 +124,7 @@ class Train():
         
         return " ".join(list(filter(None, cmd)))
 
-    def main_trainClassifier(self, **kwargs):
+    def trainClassifier(self, **kwargs):
         """
             Trains supervised classifier
             Paras:
@@ -136,6 +137,13 @@ class Train():
         model = kwargs["model"]
         parameters = self.setParameters(**kwargs)
         system("../fastText/fasttext {} -input ../Dataset/training_set_processed/training_{}.txt -output ../fastTextModels/model_{} -label __label__ {}".format(model, name, name, parameters))
+
+class Test():
+
+    def testClassifier(self, name):
+        test_directory = join("../Dataset/test_set", "test_{}.txt".format(name))
+        test_cmd = "../fastText/fasttext test ../fastTextModels/model_{}.bin {}".format(name, test_directory)
+        return shell2var(test_cmd)
 
 if __name__ == "__main__":
     kwargs = {
@@ -165,5 +173,8 @@ if __name__ == "__main__":
             "qnorm": None, 
             "qout": None, 
             "dsub": None}
-    classifier = Train()
-    classifier.main_trainClassifier(**kwargs)
+    train = Train()
+    train.trainClassifier(**kwargs)
+    test = Test()
+    results = test.testClassifier(kwargs["name"])
+    print(results)

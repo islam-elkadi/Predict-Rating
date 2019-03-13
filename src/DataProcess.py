@@ -38,6 +38,7 @@ class DataProcessing():
         df = self.balanceReviews(split_reviews, columns)
         df["reviews"] = df["summary"] + " " + df["reviewText"]
         df["reviews"] = df["reviews"].apply(lambda x: clean_text(x))
+        df = df.sample(frac = 1).reset_index(drop=True)
         return df[["reviews", "overall"]]
 
 if __name__ == "__main__":
